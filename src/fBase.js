@@ -1,4 +1,10 @@
 import { initializeApp } from "firebase/app";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import Auth from "routes/Auth";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_apiKey,
@@ -8,5 +14,5 @@ const firebaseConfig = {
   messagingSenderId: process.env.REACT_APP_messagingSenderId,
   appId: process.env.REACT_APP_appId,
 };
-const firebaseApp = initializeApp(firebaseConfig);
-export default firebaseApp;
+export const firebaseApp = initializeApp(firebaseConfig);
+export const authService = getAuth();
