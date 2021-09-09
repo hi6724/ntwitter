@@ -8,6 +8,7 @@ import {
   orderBy,
   query,
 } from "@firebase/firestore";
+import Nweet from "components/Nweet";
 import { authService, dbService } from "fBase";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -53,9 +54,11 @@ const Home = ({ userObj }) => {
         <input type="submit" value="Nweet" />
       </form>
       {nweets.map((nweet) => (
-        <div key={nweet.id}>
-          <h4>{nweet.text}</h4>
-        </div>
+        <Nweet
+          key={nweet.id}
+          nweetObj={nweet}
+          isOwner={nweet.creatorId === userObj.uid}
+        />
       ))}
     </div>
   );
