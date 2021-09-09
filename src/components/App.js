@@ -5,9 +5,11 @@ import AppRouter from "./Router";
 function App() {
   const [init, setInit] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userObj, setUserObj] = useState(null);
   useEffect(() => {
     onAuthStateChanged(authService, (user) => {
       if (user) {
+        setUserObj(user);
         setIsLoggedIn(true);
       } else {
         setIsLoggedIn(false);
@@ -17,7 +19,11 @@ function App() {
   }, []);
   return (
     <>
-      {init ? <AppRouter isLoggedIn={isLoggedIn} /> : <span>Loading...</span>}
+      {init ? (
+        <AppRouter userObj={userObj} isLoggedIn={isLoggedIn} />
+      ) : (
+        <span>Loading...</span>
+      )}
       <footer>&copy;{new Date().getFullYear()}Ntwitter</footer>
     </>
   );
