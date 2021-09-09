@@ -7,41 +7,26 @@ import {
 } from "@firebase/auth";
 import { authService } from "fBase";
 import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 
 const Auth = (props) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { register, handleSubmit, getValues } = useForm();
   const [newAccount, setNewAccount] = useState(true);
   const [error, setError] = useState("");
-  const onChange = (event) => {
-    const {
-      target: { name, value },
-    } = event;
-    if (name === "email") {
-      setEmail(value);
-    } else if (name === "password") {
-      setPassword(value);
-    }
-  };
-  const onSubmit = async (event) => {
-    event.preventDefault();
+
+  const onSubmit = async () => {
+    const { email, password } = getValues();
     try {
-      let data;
       if (newAccount) {
-        data = await createUserWithEmailAndPassword(
-          authService,
-          email,
-          password
-        );
+        await createUserWithEmailAndPassword(authService, email, password);
       } else {
-        data = await signInWithEmailAndPassword(authService, email, password);
+        await signInWithEmailAndPassword(authService, email, password);
       }
-      console.log(data);
     } catch (error) {
-      console.log(error);
       setError(error.message);
     }
   };
+
   const toggleAccount = () => setNewAccount((prev) => !prev);
   const onSocialClick = async (event) => {
     const {
@@ -62,22 +47,18 @@ const Auth = (props) => {
   };
   return (
     <div>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <input
-          name="email"
+          {...register("email")}
           type="email"
           placeholder="Email"
           required
-          value={email}
-          onChange={onChange}
         />
         <input
-          name="password"
+          {...register("password")}
           type="password"
           placeholder="Password"
           required
-          value={password}
-          onChange={onChange}
         />
         <input
           type="submit"
