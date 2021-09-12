@@ -39,13 +39,15 @@ const Home = ({ userObj }) => {
   const { register, handleSubmit, getValues, setValue, watch } = useForm();
   const onSubmit = async () => {
     const { nweet, photo } = getValues();
-    const attachmentRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
-    const metadata = {
-      contentType: "image",
-    };
-    await uploadBytes(attachmentRef, photo[0], metadata);
-    const attachmentUrl = await getDownloadURL(attachmentRef);
-    console.log(attachmentUrl);
+    let attachmentUrl = null;
+    if (photo[0]) {
+      const attachmentRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
+      const metadata = {
+        contentType: "image",
+      };
+      await uploadBytes(attachmentRef, photo[0], metadata);
+      attachmentUrl = await getDownloadURL(attachmentRef);
+    }
     await addDoc(collection(dbService, "nweets"), {
       text: nweet,
       createdAt: Date.now(),

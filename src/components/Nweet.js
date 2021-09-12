@@ -1,5 +1,6 @@
 import { deleteDoc, doc, updateDoc } from "@firebase/firestore";
-import { dbService } from "fBase";
+import { deleteObject, listAll, ref } from "@firebase/storage";
+import { dbService, storageService } from "fBase";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -9,6 +10,8 @@ const Nweet = ({ nweetObj, isOwner }) => {
   const onDeleteClick = async () => {
     const ok = window.confirm("Are you sure you want to delete this nweet?");
     if (ok) {
+      nweetObj.attachmentUrl &&
+        (await deleteObject(ref(storageService, nweetObj.attachmentUrl)));
       await deleteDoc(doc(dbService, `nweets/${nweetObj.id}`));
     }
   };
