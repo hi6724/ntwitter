@@ -1,5 +1,5 @@
 import { deleteDoc, doc, updateDoc } from "@firebase/firestore";
-import { deleteObject, listAll, ref } from "@firebase/storage";
+import { deleteObject, ref } from "@firebase/storage";
 import { dbService, storageService } from "fBase";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -18,7 +18,6 @@ const Nweet = ({ nweetObj, isOwner }) => {
   const toggleEditing = () => setEditing((prev) => !prev);
 
   const onSubmit = async () => {
-    console.log(getValues("newNweet"));
     updateDoc(doc(dbService, `nweets/${nweetObj.id}`), {
       text: getValues("newNweet"),
     });

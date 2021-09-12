@@ -9,7 +9,11 @@ function App() {
   useEffect(() => {
     onAuthStateChanged(authService, (user) => {
       if (user) {
-        setUserObj(user);
+        setUserObj({
+          displayName: user.displayName,
+          uid: user.uid,
+          photoUrl: user.photoURL,
+        });
         setIsLoggedIn(true);
       } else {
         setIsLoggedIn(false);
@@ -17,10 +21,22 @@ function App() {
       setInit(true);
     });
   }, []);
+  const refreshUser = async () => {
+    const user = await authService.currentUser;
+    setUserObj({
+      displayName: user.displayName,
+      uid: user.uid,
+      photoUrl: user.photoURL,
+    });
+  };
   return (
     <>
       {init ? (
-        <AppRouter userObj={userObj} isLoggedIn={isLoggedIn} />
+        <AppRouter
+          refreshUser={refreshUser}
+          userObj={userObj}
+          isLoggedIn={isLoggedIn}
+        />
       ) : (
         <span>Loading...</span>
       )}

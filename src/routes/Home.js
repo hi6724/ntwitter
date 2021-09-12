@@ -1,28 +1,20 @@
-import { signOut } from "@firebase/auth";
 import { v4 as uuidv4 } from "uuid";
 import {
   addDoc,
   collection,
-  doc,
-  getDocs,
   onSnapshot,
   orderBy,
   query,
 } from "@firebase/firestore";
-import {
-  getDownloadURL,
-  ref,
-  uploadBytes,
-  uploadString,
-} from "@firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "@firebase/storage";
 import Nweet from "components/Nweet";
-import { authService, dbService, storageService } from "fBase";
+import { dbService, storageService } from "fBase";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 const Home = ({ userObj }) => {
   const [nweets, setNweets] = useState([]);
-  const [attachment, setAttachment] = useState();
+  const [attachment, setAttachment] = useState("");
   useEffect(async () => {
     const q = query(
       collection(dbService, "nweets"),
@@ -36,16 +28,14 @@ const Home = ({ userObj }) => {
       setNweets(nweetArray);
     });
   }, []);
-  const { register, handleSubmit, getValues, setValue, watch } = useForm();
+  const { register, handleSubmit, getValues, setValue } = useForm();
   const onSubmit = async () => {
     const { nweet, photo } = getValues();
     let attachmentUrl = null;
     if (photo[0]) {
       const attachmentRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
-      const metadata = {
-        contentType: "image",
-      };
-      await uploadBytes(attachmentRef, photo[0], metadata);
+
+      await uploadBytes(attachmentRef, photo[0]);
       attachmentUrl = await getDownloadURL(attachmentRef);
     }
     await addDoc(collection(dbService, "nweets"), {
