@@ -24,7 +24,6 @@ function App() {
       ) : (
         <span>Loading...</span>
       )}
-      <footer>&copy;{new Date().getFullYear()}Ntwitter</footer>
     </>
   );
 }
