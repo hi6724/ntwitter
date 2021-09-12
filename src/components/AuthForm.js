@@ -5,7 +5,12 @@ import {
 import { authService } from "fBase";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-
+import styled from "styled-components";
+const Container = styled.div`
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+`;
 const AuthForm = () => {
   const { register, handleSubmit, getValues } = useForm();
   const [newAccount, setNewAccount] = useState(true);
@@ -22,11 +27,15 @@ const AuthForm = () => {
       setError(error.message);
     }
   };
-
+  const Form = styled.form`
+    display: flex;
+    flex-direction: column;
+  `;
+  const Error = styled.h4``;
   const toggleAccount = () => setNewAccount((prev) => !prev);
   return (
-    <>
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <Container>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         <input
           {...register("email")}
           type="email"
@@ -44,12 +53,12 @@ const AuthForm = () => {
           value={newAccount ? "Create Account" : "Log In"}
           required
         />
-        {error}
-      </form>
+      </Form>
       <span onClick={toggleAccount}>
         {newAccount ? "LogIn" : "CreateAccount"}CreateAccount
       </span>
-    </>
+      <Error>{error}</Error>
+    </Container>
   );
 };
 export default AuthForm;

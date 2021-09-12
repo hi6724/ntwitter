@@ -1,15 +1,55 @@
 import {
-  createUserWithEmailAndPassword,
   GithubAuthProvider,
   GoogleAuthProvider,
-  signInWithEmailAndPassword,
   signInWithPopup,
 } from "@firebase/auth";
+import {
+  faGithub,
+  faGoogle,
+  faTwitter,
+} from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AuthForm from "components/AuthForm";
+import Color from "components/Color";
 import { authService } from "fBase";
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import styled from "styled-components";
 
+const Container = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+  background-color: ${Color.black};
+  opacity: 0.9;
+  height: 550px;
+  border-radius: 25px;
+`;
+const Button = styled.button`
+  position: relative;
+  background-color: #ffffff;
+  border-radius: 15px;
+  padding: 15px;
+  margin: 10px;
+  height: 50px;
+  font-size: 13px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s;
+  cursor: pointer;
+`;
+const ButtonBox = styled.div`
+  display: flex;
+  .github:hover {
+    background-color: #333333;
+    color: #ffffff;
+  }
+  .google:hover {
+    background-color: #de463b;
+    color: #ffffff;
+  }
+`;
 const Auth = (props) => {
   const onSocialClick = async (event) => {
     const {
@@ -29,17 +69,20 @@ const Auth = (props) => {
     }
   };
   return (
-    <div>
+    <Container>
+      <FontAwesomeIcon icon={faTwitter} color={"#04AAFF"} size="3x" />
       <AuthForm />
-      <div>
-        <button onClick={onSocialClick} name="google">
-          Continue with Google
-        </button>
-        <button onClick={onSocialClick} name="github">
-          Continue with Github
-        </button>
-      </div>
-    </div>
+      <ButtonBox>
+        <Button onClick={onSocialClick} name="google" className="google">
+          <span>Continue With Google &nbsp; &nbsp; </span>
+          <FontAwesomeIcon icon={faGoogle} size="2x" />
+        </Button>
+        <Button onClick={onSocialClick} name="github" className="github">
+          <span>Continue With github &nbsp; &nbsp;</span>
+          <FontAwesomeIcon icon={faGithub} size="2x" />
+        </Button>
+      </ButtonBox>
+    </Container>
   );
 };
 export default Auth;
