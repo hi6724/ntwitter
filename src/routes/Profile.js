@@ -1,7 +1,6 @@
 import { signOut, updateProfile } from "@firebase/auth";
 import {
   collection,
-  getDocs,
   onSnapshot,
   orderBy,
   query,
