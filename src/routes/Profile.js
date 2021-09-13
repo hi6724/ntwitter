@@ -1,6 +1,7 @@
 import { signOut, updateProfile } from "@firebase/auth";
 import {
   collection,
+  limit,
   onSnapshot,
   orderBy,
   query,
@@ -12,6 +13,7 @@ import { authService, dbService, storageService } from "fBase";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router";
+import { Container } from "style/HomeStyle";
 
 const Profile = ({ refreshUser, userObj }) => {
   const { register, handleSubmit, setValue, getValues } = useForm();
@@ -19,15 +21,17 @@ const Profile = ({ refreshUser, userObj }) => {
   const [nweets, setNweets] = useState([]);
   setValue("newDisplayName", userObj.displayName);
   const history = useHistory();
-  const onLogOutClick = () => {
-    signOut(authService);
+  const onLogOutClick = async () => {
+    await signOut(authService);
     history.push("/");
+    window.location.reload();
   };
   const getMyNweets = async () => {
     const q = await query(
       collection(dbService, "nweets"),
       orderBy("createdAt", "desc"),
-      where("creatorId", "==", userObj.uid)
+      where("creatorId", "==", userObj.uid),
+      limit(5)
     );
     onSnapshot(q, (snapShot) => {
       const nweetArray = snapShot.docs.map((doc) => ({
@@ -76,7 +80,7 @@ const Profile = ({ refreshUser, userObj }) => {
   }, []);
 
   return (
-    <>
+    <Container>
       <img src={tempPhoto} width="150px" />
       <form onSubmit={handleSubmit(onSubmit)}>
         <input
@@ -98,9 +102,10 @@ const Profile = ({ refreshUser, userObj }) => {
           key={nweet.id}
           nweetObj={nweet}
           isOwner={nweet.creatorId === userObj.uid}
+          userObj={userObj}
         />
       ))}
-    </>
+    </Container>
   );
 };
 export default Profile;

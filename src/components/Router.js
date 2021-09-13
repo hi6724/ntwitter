@@ -9,22 +9,23 @@ import Profile from "routes/Profile";
 import styled from "styled-components";
 import Auth from "../routes/Auth";
 import Home from "../routes/Home";
-import Color from "./Color";
 import Navigation from "./Navigation";
 const Body = styled.div`
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   background-color: aliceblue;
+  flex-direction: column;
 `;
 const AppRouter = ({ refreshUser, isLoggedIn, userObj }) => {
   return (
     <Router>
-      {isLoggedIn && <Navigation userObj={userObj} />}
       <Switch>
         {isLoggedIn ? (
           <Body>
+            {isLoggedIn && <Navigation userObj={userObj} />}
             <Route exact path="/">
               <Home userObj={userObj} />
             </Route>

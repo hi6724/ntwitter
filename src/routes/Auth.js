@@ -53,13 +53,16 @@ const ButtonBox = styled.div`
 const Auth = (props) => {
   const onSocialClick = async (event) => {
     const {
-      target: { name },
+      target: { className },
     } = event;
+    console.log(className);
     let provider;
-    if (name === "google") {
+    if (className === "google") {
       provider = new GoogleAuthProvider();
-    } else if (name === "github") {
+      console.log("try google");
+    } else if (className === "github") {
       provider = new GithubAuthProvider();
+      console.log("try github");
     }
     try {
       const result = await signInWithPopup(authService, provider);
@@ -74,12 +77,12 @@ const Auth = (props) => {
       <AuthForm />
       <ButtonBox>
         <Button onClick={onSocialClick} name="google" className="google">
-          <span>Continue With Google &nbsp; &nbsp; </span>
-          <FontAwesomeIcon icon={faGoogle} size="2x" />
+          <span className="google">Continue With Google &nbsp; &nbsp; </span>
+          <FontAwesomeIcon className="google" icon={faGoogle} size="2x" />
         </Button>
         <Button onClick={onSocialClick} name="github" className="github">
-          <span>Continue With github &nbsp; &nbsp;</span>
-          <FontAwesomeIcon icon={faGithub} size="2x" />
+          <span className="github">Continue With github &nbsp; &nbsp;</span>
+          <FontAwesomeIcon className="github" icon={faGithub} size="2x" />
         </Button>
       </ButtonBox>
     </Container>

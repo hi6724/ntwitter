@@ -10,7 +10,9 @@ function App() {
     onAuthStateChanged(authService, (user) => {
       if (user) {
         setUserObj({
-          displayName: user.displayName,
+          displayName: user.displayName
+            ? user.displayName
+            : user.email.split("@")[0],
           uid: user.uid,
           photoUrl: user.photoURL,
         });
@@ -24,11 +26,15 @@ function App() {
   }, []);
   const refreshUser = async () => {
     const user = await authService.currentUser;
-    setUserObj({
-      displayName: user.displayName,
-      uid: user.uid,
-      photoUrl: user.photoURL,
-    });
+    if (user) {
+      setUserObj({
+        displayName: user.displayName,
+        uid: user.uid,
+        photoUrl: user.photoURL,
+      });
+    } else {
+      setUserObj(null);
+    }
   };
   return (
     <>

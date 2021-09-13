@@ -5,15 +5,18 @@ import {
 import { authService } from "fBase";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { AuthInput, Form, Login, SubmitButton } from "style/AuthStyle";
 import styled from "styled-components";
 const Container = styled.div`
-  color: #fff;
+  width: 300px;
   display: flex;
   flex-direction: column;
 `;
+
+const Error = styled.h4``;
 const AuthForm = () => {
   const { register, handleSubmit, getValues } = useForm();
-  const [newAccount, setNewAccount] = useState(true);
+  const [newAccount, setNewAccount] = useState(false);
   const [error, setError] = useState("");
   const onSubmit = async () => {
     const { email, password } = getValues();
@@ -27,36 +30,32 @@ const AuthForm = () => {
       setError(error.message);
     }
   };
-  const Form = styled.form`
-    display: flex;
-    flex-direction: column;
-  `;
-  const Error = styled.h4``;
   const toggleAccount = () => setNewAccount((prev) => !prev);
   return (
     <Container>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <input
+        <AuthInput
           {...register("email")}
           type="email"
           placeholder="Email"
           required
         />
-        <input
+        <AuthInput
           {...register("password")}
           type="password"
           placeholder="Password"
           required
         />
-        <input
+        <SubmitButton
+          className="submit"
           type="submit"
           value={newAccount ? "Create Account" : "Log In"}
           required
         />
       </Form>
-      <span onClick={toggleAccount}>
-        {newAccount ? "LogIn" : "CreateAccount"}CreateAccount
-      </span>
+      <Login onClick={toggleAccount}>
+        {newAccount ? "LogIn" : "CreateAccount"}
+      </Login>
       <Error>{error}</Error>
     </Container>
   );

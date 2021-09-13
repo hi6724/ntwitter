@@ -4,6 +4,11 @@ import { v4 as uuidv4 } from "uuid";
 import { getDownloadURL, ref, uploadBytes } from "@firebase/storage";
 import { dbService, storageService } from "fBase";
 import { addDoc, collection } from "@firebase/firestore";
+import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFile, faImage, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { Form, TextArea } from "style/NweetFactoryStyle";
+import { AuthInput, SubmitButton } from "style/AuthStyle";
 
 const NweetFacotry = ({ userObj }) => {
   const [attachment, setAttachment] = useState("");
@@ -44,27 +49,31 @@ const NweetFacotry = ({ userObj }) => {
     reader.readAsDataURL(theFile);
   };
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input
+    <Form onSubmit={handleSubmit(onSubmit)}>
+      <AuthInput
         {...register("nweet")}
         type="text"
         placeholder="What's on your mind?"
-        maxLength={120}
-      />
-      <input
-        {...register("photo")}
-        onChange={onFileChange}
-        type="file"
-        accept="image/*"
-      />
-      <input type="submit" value="Nweet" />
+        maxLength={80}
+      ></AuthInput>
+      <label htmlFor="file-upload" className="custom-file-upload">
+        <FontAwesomeIcon icon={faImage} size="lg" />
+        <input
+          id="file-upload"
+          {...register("photo")}
+          onChange={onFileChange}
+          type="file"
+          accept="image/*"
+        />
+      </label>
+      <SubmitButton type="submit" value="Nweet" />
       {attachment && (
         <div>
           <img src={attachment} width="150px" height="150px" />
           <button onClick={onClearAttachment}>Clear</button>
         </div>
       )}
-    </form>
+    </Form>
   );
 };
 
