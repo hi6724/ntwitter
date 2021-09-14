@@ -6,7 +6,13 @@ import { addDoc, collection } from "@firebase/firestore";
 import { authService, dbService } from "fBase";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { AuthInput, Form, Login, SubmitButton } from "style/AuthStyle";
+import {
+  AuthInput,
+  Button31,
+  Form,
+  Login,
+  SubmitButton,
+} from "style/AuthStyle";
 import styled from "styled-components";
 const Container = styled.div`
   width: 300px;
@@ -68,9 +74,9 @@ const AuthForm = () => {
           required
         />
       </Form>
-      <Login onClick={toggleAccount}>
+      <Button31 onClick={toggleAccount}>
         {newAccount ? "LogIn" : "CreateAccount"}
-      </Login>
+      </Button31>
       <Error>{error}</Error>
     </Container>
   );

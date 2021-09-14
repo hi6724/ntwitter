@@ -13,6 +13,7 @@ import { dbService } from "fBase";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { ButtonContainer, Container, ControlButton } from "style/HomeStyle";
+import { OtherProfileDiv } from "style/OtherProfileStyle";
 
 export const OtherProfile = () => {
   const [nweets, setNweets] = useState([]);
@@ -93,19 +94,19 @@ export const OtherProfile = () => {
 
   return (
     <Container>
-      <img src={photoURL} width="150px" />
-      <span>{displayName}의 프로필</span>
+      <OtherProfileDiv>
+        <img src={photoURL} width="150px" />
+        <span>{displayName}'s Profile</span>
+      </OtherProfileDiv>
       {nweets.map((nweet) => (
         <Nweet key={nweet.id} nweetObj={nweet} isOwner={false} />
       ))}
-      <ButtonContainer>
-        <ControlButton id="prev" onClick={handleClick}>
-          ◀
-        </ControlButton>
-        <ControlButton id="next" onClick={handleClick}>
-          ▶
-        </ControlButton>
-      </ButtonContainer>
+      <ControlButton id="prev" onClick={handleClick}>
+        ◀
+      </ControlButton>
+      <ControlButton id="next" onClick={handleClick}>
+        ▶
+      </ControlButton>
     </Container>
   );
 };

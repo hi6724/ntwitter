@@ -13,11 +13,23 @@ import { dbService, storageService } from "fBase";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { ProfileImage, StyledNweet } from "style/NweetStyle";
+import {
+  ProfileDisplayName,
+  ProfileImage,
+  ProfileImageContainer,
+  StyledNweet,
+  TextContainer,
+  NweetText,
+  NweetName,
+  EditButtons,
+  ShowButton,
+  EditButton,
+} from "style/NweetStyle";
 
 const Nweet = ({ nweetObj, isOwner, userObj }) => {
   const { register, getValues, handleSubmit } = useForm();
   const [photoURL, setPhotoURL] = useState("");
+  const [showEdit, setShowEdit] = useState(false);
   const [displayName, setDisplayName] = useState("");
   const [editing, setEditing] = useState(false);
   useEffect(() => {
@@ -78,6 +90,9 @@ const Nweet = ({ nweetObj, isOwner, userObj }) => {
     setDisplayName(userDisplayName);
     setPhotoURL(userPhotoURL);
   };
+  const onShowClick = () => {
+    setShowEdit((prev) => !prev);
+  };
   return (
     <div>
       {editing ? (
@@ -97,19 +112,27 @@ const Nweet = ({ nweetObj, isOwner, userObj }) => {
         <StyledNweet>
           <Link to={isOwner ? "/profile" : nweetObj.creatorId}>
             <ProfileImage src={photoURL} />
-            <span>{displayName}</span>
           </Link>
-
-          {nweetObj.attachmentUrl && (
-            <img src={nweetObj.attachmentUrl} width="50px" height="50px" />
-          )}
-          <h4>{nweetObj.text}</h4>
-          {isOwner && (
-            <>
-              <button onClick={onDeleteClick}>Delete Nweet</button>
-              <button onClick={toggleEditing}>Edit Nweet</button>
-            </>
-          )}
+          <div>
+            <TextContainer>
+              <NweetName>{displayName}</NweetName>
+              <NweetText>{nweetObj.text}</NweetText>
+              {nweetObj.attachmentUrl && <img src={nweetObj.attachmentUrl} />}
+            </TextContainer>
+            {isOwner && (
+              <EditButtons showEdit={showEdit}>
+                <ShowButton onClick={onShowClick} showEdit={showEdit}>
+                  {showEdit ? "Calcel" : "Edit"}
+                </ShowButton>
+                <EditButton showEdit={showEdit} onClick={onDeleteClick}>
+                  Delete Nweet
+                </EditButton>
+                <EditButton showEdit={showEdit} onClick={toggleEditing}>
+                  Edit Nweet
+                </EditButton>
+              </EditButtons>
+            )}
+          </div>
         </StyledNweet>
       )}
     </div>

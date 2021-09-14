@@ -1,7 +1,18 @@
 import { onAuthStateChanged } from "@firebase/auth";
 import { authService } from "fBase";
 import { useEffect, useState } from "react";
+import { createGlobalStyle } from "styled-components";
 import AppRouter from "./Router";
+
+const GlobalStyles = createGlobalStyle`
+  font-family:"Spoqa Han Sans Neo", "Spoqa Han Sans JP", sans-serif;
+
+    a {
+      text-decoration: none;
+      color:inherit;
+    }
+`;
+
 function App() {
   const [init, setInit] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -44,6 +55,7 @@ function App() {
   };
   return (
     <>
+      <GlobalStyles />
       {init ? (
         <AppRouter
           refreshUser={refreshUser}

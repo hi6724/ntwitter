@@ -18,6 +18,13 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useHistory, useParams } from "react-router";
 import { ButtonContainer, Container, ControlButton } from "style/HomeStyle";
+import { Button11 } from "style/NweetStyle";
+import {
+  Label,
+  LogoutButton,
+  ProfileLayout,
+  UpdateButton,
+} from "style/ProfileStyle";
 
 const Profile = ({ refreshUser, userObj }) => {
   const { register, handleSubmit, setValue, getValues } = useForm();
@@ -134,22 +141,26 @@ const Profile = ({ refreshUser, userObj }) => {
 
   return (
     <Container>
-      <img src={tempPhoto} width="150px" />
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input
-          {...register("newDisplayName")}
-          type="text"
-          placeholder="Display name"
-        />
-        <input
-          {...register("profilePhoto")}
-          onChange={onFileChange}
-          type="file"
-          accept="image/*"
-        />
-        <input type="submit" value="Update Profile" />
-      </form>
-      <button onClick={onLogOutClick}>Log Out</button>
+      <ProfileLayout>
+        <Label htmlFor="profilePhoto" img={tempPhoto}></Label>
+
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <input
+            {...register("newDisplayName")}
+            type="text"
+            placeholder="Display name"
+          />
+          <input
+            {...register("profilePhoto")}
+            onChange={onFileChange}
+            id="profilePhoto"
+            type="file"
+            accept="image/*"
+          />
+          <UpdateButton onClick={handleSubmit(onSubmit)}>Update</UpdateButton>
+        </form>
+        <LogoutButton onClick={onLogOutClick}>Log Out</LogoutButton>
+      </ProfileLayout>
       {nweets.map((nweet) => (
         <Nweet
           key={nweet.id}

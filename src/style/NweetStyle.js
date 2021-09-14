@@ -1,15 +1,107 @@
 import styled from "styled-components";
 
 export const StyledNweet = styled.div`
+  display: flex;
   background-color: white;
+  position: relative;
   outline: none;
   padding: 12px 5px;
   margin: 12px 0px;
   border-radius: 12px;
   border: 2px solid white;
   box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.33);
+  transition: all 0.5s;
+  > div {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
 `;
+
+/* CSS */
+export const Button11 = styled.button`
+  appearance: button;
+  background-color: #1899d6;
+  border: solid transparent;
+  border-radius: 16px;
+  border-width: 0 0 4px;
+  box-sizing: border-box;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: din-round, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  line-height: 20px;
+  margin: 0;
+  outline: none;
+  overflow: visible;
+  padding: 3px 16px;
+  text-align: center;
+  text-transform: uppercase;
+  touch-action: manipulation;
+  transform: translateZ(0);
+  transition: filter 0.2s;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+  /* width: 100%; */
+  :after {
+    background-clip: padding-box;
+    background-color: #1cb0f6;
+    border: solid transparent;
+    border-radius: 16px;
+    border-width: 0 0 4px;
+    bottom: -4px;
+    content: "";
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: -1;
+  }
+  :main,
+  :focus {
+    user-select: auto;
+  }
+  :hover:not(:disabled) {
+    filter: brightness(1.1);
+  }
+  :disabled {
+    cursor: auto;
+  }
+`;
+
 export const ProfileImage = styled.img`
-  width: 35px;
+  width: 50px;
   border-radius: 50%;
+`;
+export const ShowButton = styled(Button11)``;
+export const EditButton = styled(Button11)`
+  display: ${(props) => (props.showEdit ? "block" : "none")};
+`;
+export const EditButtons = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* transform: translateX(370px); */
+`;
+
+export const TextContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  img {
+    margin-top: 15px;
+    width: 100%;
+    border-radius: 15px;
+  }
+`;
+export const NweetName = styled.span`
+  font-weight: 600;
+  margin-left: 12px;
+`;
+export const NweetText = styled.span`
+  margin-left: 12px;
 `;

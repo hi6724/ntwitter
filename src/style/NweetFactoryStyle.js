@@ -16,7 +16,11 @@ export const Form = styled.form`
     word-wrap: break-word;
     text-overflow: clip;
     width: 440px;
-    height: 50px;
+    height: 20px;
+    :focus {
+      height: 50px;
+    }
+    transition: all 0.5s;
   }
   input[type="file"] {
     display: flex;

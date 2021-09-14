@@ -61,6 +61,7 @@ const Home = ({ userObj }) => {
     });
   };
   const handleClick = (e) => {
+    console.log(nweets.length);
     const {
       target: { id },
     } = e;
@@ -74,10 +75,13 @@ const Home = ({ userObj }) => {
       });
     } else {
       setPage((prev) => {
-        return (prev += 1);
+        if (nweets.length < 5) {
+          return prev;
+        } else {
+          return (prev += 1);
+        }
       });
     }
-    console.log(page);
   };
   return (
     <>
@@ -92,14 +96,12 @@ const Home = ({ userObj }) => {
             userSnapShot={userSnapShot}
           />
         ))}
-        <ButtonContainer>
-          <ControlButton id="prev" onClick={handleClick}>
-            ◀
-          </ControlButton>
-          <ControlButton id="next" onClick={handleClick}>
-            ▶
-          </ControlButton>
-        </ButtonContainer>
+        <ControlButton id="prev" onClick={handleClick}>
+          ◀
+        </ControlButton>
+        <ControlButton id="next" onClick={handleClick}>
+          ▶
+        </ControlButton>
       </Container>
     </>
   );

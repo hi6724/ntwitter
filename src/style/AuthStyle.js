@@ -24,11 +24,35 @@ export const SubmitButton = styled(AuthInput)`
     color: white;
   }
 `;
-export const Login = styled.span`
+
+/* CSS */
+export const Button31 = styled.button`
+  background-color: #222;
+  border-radius: 4px;
+  border-style: none;
+  box-sizing: border-box;
+  color: #fff;
   cursor: pointer;
+  display: inline-block;
+  font-family: "Farfetch Basis", "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.5;
+  margin: 0;
+  max-width: none;
+  min-height: 44px;
+  min-width: 10px;
+  outline: none;
+  overflow: hidden;
+  padding: 9px 20px 8px;
+  position: relative;
   text-align: center;
-  background-color: black;
-  color: white;
-  border-radius: 15px;
-  padding: 5px 5px;
+  text-transform: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 100%;
+  :hover {
+    opacity: 0.75;
+  }
 `;
