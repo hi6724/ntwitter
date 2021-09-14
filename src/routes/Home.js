@@ -13,11 +13,9 @@ import NweetFacotry from "components/NweetFactory";
 import { dbService } from "fBase";
 import React, { useEffect, useState } from "react";
 import { ButtonContainer, Container, ControlButton } from "style/HomeStyle";
-import styled from "styled-components";
 
-const Home = ({ userObj }) => {
+const Home = ({ userObj, page, setPage }) => {
   const [userSnapShot, setUserSnapShot] = useState();
-  const [page, setPage] = useState(1);
   const [nweets, setNweets] = useState([]);
   const getUserSnapShot = async () => {
     const userQuery = await query(

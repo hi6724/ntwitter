@@ -21,15 +21,16 @@ const Body = styled.div`
 `;
 
 const AppRouter = ({ refreshUser, isLoggedIn, userObj }) => {
+  const [page, setPage] = useState(1);
   return (
     <Router>
       <Switch>
         {isLoggedIn ? (
           <Body>
-            {isLoggedIn && <Navigation userObj={userObj} />}
+            {isLoggedIn && <Navigation userObj={userObj} setPage={setPage} />}
             <Switch>
               <Route exact path="/">
-                <Home userObj={userObj} />
+                <Home userObj={userObj} page={page} setPage={setPage} />
               </Route>
               <Route exact path="/profile">
                 <Profile userObj={userObj} refreshUser={refreshUser} />
