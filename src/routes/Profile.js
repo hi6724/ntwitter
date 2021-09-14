@@ -2,10 +2,12 @@ import { signOut, updateProfile } from "@firebase/auth";
 import {
   collection,
   doc,
+  getDocs,
   limit,
   onSnapshot,
   orderBy,
   query,
+  startAfter,
   updateDoc,
   where,
 } from "@firebase/firestore";
@@ -14,13 +16,15 @@ import Nweet from "components/Nweet";
 import { authService, dbService, storageService } from "fBase";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useHistory } from "react-router";
-import { Container } from "style/HomeStyle";
+import { useHistory, useParams } from "react-router";
+import { ButtonContainer, Container, ControlButton } from "style/HomeStyle";
 
 const Profile = ({ refreshUser, userObj }) => {
   const { register, handleSubmit, setValue, getValues } = useForm();
+  const [page, setPage] = useState(1);
   const [tempPhoto, setTempPhoto] = useState(userObj.photoUrl);
   const [nweets, setNweets] = useState([]);
+  let nweetArray;
   setValue("newDisplayName", userObj.displayName);
   const history = useHistory();
   const onLogOutClick = async () => {
@@ -28,18 +32,34 @@ const Profile = ({ refreshUser, userObj }) => {
     history.push("/");
     window.location.reload();
   };
-  const getMyNweets = async () => {
-    const q = await query(
+  const getMyNweets = async (page) => {
+    let q = await query(
       collection(dbService, "nweets"),
       orderBy("createdAt", "desc"),
       where("creatorId", "==", userObj.uid),
       limit(5)
     );
-    onSnapshot(q, (snapShot) => {
-      const nweetArray = snapShot.docs.map((doc) => ({
+    while (page > 1) {
+      const documentSnapshots = await getDocs(q);
+      const lastVisible =
+        documentSnapshots.docs[documentSnapshots.docs.length - 1];
+      q = query(
+        collection(dbService, "nweets"),
+        orderBy("createdAt", "desc"),
+        where("creatorId", "==", userObj.uid),
+        startAfter(lastVisible),
+        limit(5)
+      );
+      page -= 1;
+    }
+    await onSnapshot(q, (snapShot) => {
+      nweetArray = snapShot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
+      if (nweetArray.length < 1) {
+        setPage((prev) => (prev -= 1));
+      }
       setNweets(nweetArray);
     });
   };
@@ -59,14 +79,42 @@ const Profile = ({ refreshUser, userObj }) => {
         displayName: newDisplayName,
         photoURL: newProfileUrl,
       });
-      // updateDoc(doc(dbService, `user`), {
-      //   displayName: newDisplayName,
-      //   photoURL: newProfileUrl,
-      // });
+      const userQuery = await query(
+        collection(dbService, "user"),
+        where("uid", "==", userObj.uid)
+      );
+      const userSnapShot = await getDocs(userQuery);
+      await updateDoc(doc(dbService, `user/${userSnapShot.docs[0].id}`), {
+        displayName: newDisplayName,
+        photoURL: newProfileUrl,
+      });
       refreshUser();
     }
   };
-
+  const handleClick = (e) => {
+    console.log(nweets.length);
+    const {
+      target: { id },
+    } = e;
+    if (id == "prev") {
+      setPage((prev) => {
+        if (prev <= 1) {
+          return 1;
+        } else {
+          return (prev -= 1);
+        }
+      });
+    } else {
+      setPage((prev) => {
+        if (nweets.length < 5) {
+          return prev;
+        } else {
+          return (prev += 1);
+        }
+      });
+    }
+    console.log(page);
+  };
   const onFileChange = (event) => {
     const {
       target: { files },
@@ -82,8 +130,8 @@ const Profile = ({ refreshUser, userObj }) => {
     reader.readAsDataURL(theFile);
   };
   useEffect(() => {
-    getMyNweets();
-  }, []);
+    getMyNweets(page);
+  }, [page]);
 
   return (
     <Container>
@@ -111,6 +159,14 @@ const Profile = ({ refreshUser, userObj }) => {
           userObj={userObj}
         />
       ))}
+      <ButtonContainer>
+        <ControlButton id="prev" onClick={handleClick}>
+          ◀
+        </ControlButton>
+        <ControlButton id="next" onClick={handleClick}>
+          ▶
+        </ControlButton>
+      </ButtonContainer>
     </Container>
   );
 };

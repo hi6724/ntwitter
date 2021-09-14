@@ -50,6 +50,21 @@ const Nweet = ({ nweetObj, isOwner, userObj }) => {
     updateDoc(doc(dbService, `nweets/${nweetObj.id}`), {
       text: getValues("newNweet"),
     });
+
+    const userQuery = await query(
+      collection(dbService, "user"),
+      where("uid", "==", userObj.uid)
+    );
+    const userSnapShot = await getDocs(userQuery);
+
+    await updateDoc(doc(dbService, `user/${userSnapShot.docs[0].id}`), {
+      nweets: userSnapShot.docs[0].data().nweets.map((nweet) => {
+        if (nweet.createdAt === nweetObj.createdAt) {
+          nweet.text = getValues("newNweet");
+        }
+        return nweet;
+      }),
+    });
     setEditing(false);
   };
   const getPhoto = async () => {
