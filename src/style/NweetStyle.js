@@ -9,3 +9,7 @@ export const StyledNweet = styled.div`
   border: 2px solid white;
   box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.33);
 `;
+export const ProfileImage = styled.img`
+  width: 35px;
+  border-radius: 50%;
+`;

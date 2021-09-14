@@ -3,8 +3,9 @@ import {
   HashRouter as Router,
   Route,
   Switch,
-  Redirect,
+  useParams,
 } from "react-router-dom";
+import { OtherProfile } from "routes/OthersProfile";
 import Profile from "routes/Profile";
 import styled from "styled-components";
 import Auth from "../routes/Auth";
@@ -19,6 +20,7 @@ const Body = styled.div`
   background-color: aliceblue;
   flex-direction: column;
 `;
+
 const AppRouter = ({ refreshUser, isLoggedIn, userObj }) => {
   return (
     <Router>
@@ -31,6 +33,9 @@ const AppRouter = ({ refreshUser, isLoggedIn, userObj }) => {
             </Route>
             <Route exact path="/profile">
               <Profile userObj={userObj} refreshUser={refreshUser} />
+            </Route>
+            <Route path="/:uid">
+              <OtherProfile />
             </Route>
           </Body>
         ) : (

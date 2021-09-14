@@ -6,6 +6,7 @@ import {
   orderBy,
   query,
   startAfter,
+  where,
 } from "@firebase/firestore";
 import Nweet from "components/Nweet";
 import NweetFacotry from "components/NweetFactory";
@@ -15,10 +16,20 @@ import { ButtonContainer, Container, ControlButton } from "style/HomeStyle";
 import styled from "styled-components";
 
 const Home = ({ userObj }) => {
+  const [userSnapShot, setUserSnapShot] = useState();
   const [page, setPage] = useState(1);
   const [nweets, setNweets] = useState([]);
+  const getUserSnapShot = async () => {
+    const userQuery = await query(
+      collection(dbService, "user"),
+      where("uid", "==", userObj.uid)
+    );
+    const userSnapShot = await getDocs(userQuery);
+    setUserSnapShot(userSnapShot);
+  };
   useEffect(async () => {
     getNweets(page);
+    getUserSnapShot();
   }, [page]);
   const getNweets = async (page) => {
     let q = query(
@@ -55,7 +66,7 @@ const Home = ({ userObj }) => {
     } = e;
     if (id == "prev") {
       setPage((prev) => {
-        if (prev == 1) {
+        if (prev <= 1) {
           return 1;
         } else {
           return (prev -= 1);
@@ -71,12 +82,14 @@ const Home = ({ userObj }) => {
   return (
     <>
       <Container>
-        <NweetFacotry userObj={userObj} />
+        <NweetFacotry userObj={userObj} userSnapShot={userSnapShot} />
         {nweets.map((nweet) => (
           <Nweet
             key={nweet.id}
             nweetObj={nweet}
             isOwner={nweet.creatorId === userObj.uid}
+            userObj={userObj}
+            userSnapShot={userSnapShot}
           />
         ))}
         <ButtonContainer>

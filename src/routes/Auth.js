@@ -3,6 +3,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "@firebase/auth";
+import { addDoc, collection } from "@firebase/firestore";
 import {
   faGithub,
   faGoogle,
@@ -11,7 +12,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AuthForm from "components/AuthForm";
 import Color from "components/Color";
-import { authService } from "fBase";
+import { authService, dbService } from "fBase";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -66,7 +67,16 @@ const Auth = (props) => {
     }
     try {
       const result = await signInWithPopup(authService, provider);
-      console.log(result);
+      await addDoc(collection(dbService, "user"), {
+        uid: result.user.uid,
+        photoURL: result.user.photoURL
+          ? result.user.photoURL
+          : "https://img1.daumcdn.net/thumb/R1280x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg",
+        displayName: result.user.displayName
+          ? result.user.displayName
+          : result.user.email.split("@")[0],
+        nweets: [],
+      });
     } catch (error) {
       console.log(error);
     }

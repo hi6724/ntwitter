@@ -1,10 +1,12 @@
 import { signOut, updateProfile } from "@firebase/auth";
 import {
   collection,
+  doc,
   limit,
   onSnapshot,
   orderBy,
   query,
+  updateDoc,
   where,
 } from "@firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "@firebase/storage";
@@ -57,6 +59,10 @@ const Profile = ({ refreshUser, userObj }) => {
         displayName: newDisplayName,
         photoURL: newProfileUrl,
       });
+      // updateDoc(doc(dbService, `user`), {
+      //   displayName: newDisplayName,
+      //   photoURL: newProfileUrl,
+      // });
       refreshUser();
     }
   };

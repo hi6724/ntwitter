@@ -53,11 +53,7 @@ const Navigation = ({ userObj }) => (
     </Link>
 
     <Link to="/profile">
-      <span>
-        {userObj?.displayName
-          ? userObj.displayName
-          : userObj.email.split("@")[0]}
-      </span>
+      <span>{userObj?.displayName}</span>
       <img
         src={
           userObj?.photoUrl

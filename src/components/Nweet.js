@@ -1,13 +1,28 @@
-import { deleteDoc, doc, updateDoc } from "@firebase/firestore";
+import { getAuth } from "@firebase/auth";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "@firebase/firestore";
 import { deleteObject, ref } from "@firebase/storage";
 import { dbService, storageService } from "fBase";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { StyledNweet } from "style/NweetStyle";
+import { Link } from "react-router-dom";
+import { ProfileImage, StyledNweet } from "style/NweetStyle";
 
-const Nweet = ({ nweetObj, isOwner, avatar }) => {
+const Nweet = ({ nweetObj, isOwner, userObj }) => {
   const { register, getValues, handleSubmit } = useForm();
+  const [photoURL, setPhotoURL] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [editing, setEditing] = useState(false);
+  useEffect(() => {
+    getPhoto();
+  }, []);
   // creatorId 이용해서 User 리턴받고 PhotoUrl 얻기
   const onDeleteClick = async () => {
     const ok = window.confirm("Are you sure you want to delete this nweet?");
@@ -15,6 +30,18 @@ const Nweet = ({ nweetObj, isOwner, avatar }) => {
       nweetObj.attachmentUrl &&
         (await deleteObject(ref(storageService, nweetObj.attachmentUrl)));
       await deleteDoc(doc(dbService, `nweets/${nweetObj.id}`));
+      //user 안에 있는 nweets array 에서 지우기
+      const userQuery = await query(
+        collection(dbService, "user"),
+        where("uid", "==", userObj.uid)
+      );
+      const userSnapShot = await getDocs(userQuery);
+
+      await updateDoc(doc(dbService, `user/${userSnapShot.docs[0].id}`), {
+        nweets: userSnapShot.docs[0]
+          .data()
+          .nweets.filter((nweet) => nweet.createdAt !== nweetObj.createdAt),
+      });
     }
   };
   const toggleEditing = () => setEditing((prev) => !prev);
@@ -25,7 +52,17 @@ const Nweet = ({ nweetObj, isOwner, avatar }) => {
     });
     setEditing(false);
   };
-
+  const getPhoto = async () => {
+    const userQuery = await query(
+      collection(dbService, "user"),
+      where("uid", "==", nweetObj.creatorId)
+    );
+    const userSnapShot = await getDocs(userQuery);
+    const userPhotoURL = userSnapShot.docs[0].data().photoURL;
+    const userDisplayName = userSnapShot.docs[0].data().displayName;
+    setDisplayName(userDisplayName);
+    setPhotoURL(userPhotoURL);
+  };
   return (
     <div>
       {editing ? (
@@ -43,13 +80,15 @@ const Nweet = ({ nweetObj, isOwner, avatar }) => {
         </>
       ) : (
         <StyledNweet>
-          <img src={avatar} />
-          <span>{nweetObj?.creatorId}</span>
+          <Link to={isOwner ? "/profile" : nweetObj.creatorId}>
+            <ProfileImage src={photoURL} />
+            <span>{displayName}</span>
+          </Link>
 
-          <h4>{nweetObj.text}</h4>
           {nweetObj.attachmentUrl && (
             <img src={nweetObj.attachmentUrl} width="50px" height="50px" />
           )}
+          <h4>{nweetObj.text}</h4>
           {isOwner && (
             <>
               <button onClick={onDeleteClick}>Delete Nweet</button>

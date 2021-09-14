@@ -10,11 +10,13 @@ function App() {
     onAuthStateChanged(authService, (user) => {
       if (user) {
         setUserObj({
+          uid: user.uid,
+          photoUrl: user.photoURL
+            ? user.photoURL
+            : "https://img1.daumcdn.net/thumb/R1280x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg",
           displayName: user.displayName
             ? user.displayName
             : user.email.split("@")[0],
-          uid: user.uid,
-          photoUrl: user.photoURL,
         });
         setIsLoggedIn(true);
       } else {
@@ -28,9 +30,13 @@ function App() {
     const user = await authService.currentUser;
     if (user) {
       setUserObj({
-        displayName: user.displayName,
         uid: user.uid,
-        photoUrl: user.photoURL,
+        photoUrl: user.photoURL
+          ? user.photoURL
+          : "https://img1.daumcdn.net/thumb/R1280x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg",
+        displayName: user.displayName
+          ? user.displayName
+          : user.email.split("@")[0],
       });
     } else {
       setUserObj(null);
