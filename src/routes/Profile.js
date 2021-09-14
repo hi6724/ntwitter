@@ -113,7 +113,6 @@ const Profile = ({ refreshUser, userObj }) => {
         }
       });
     }
-    console.log(page);
   };
   const onFileChange = (event) => {
     const {
