@@ -94,12 +94,14 @@ const Home = ({ userObj, page, setPage }) => {
             userSnapShot={userSnapShot}
           />
         ))}
-        <ControlButton id="prev" onClick={handleClick}>
-          ◀
-        </ControlButton>
-        <ControlButton id="next" onClick={handleClick}>
-          ▶
-        </ControlButton>
+        <ButtonContainer>
+          <ControlButton id="prev" onClick={handleClick}>
+            ◀
+          </ControlButton>
+          <ControlButton id="next" onClick={handleClick}>
+            ▶
+          </ControlButton>
+        </ButtonContainer>
       </Container>
     </>
   );

@@ -9,12 +9,13 @@ export const Nav = styled.div`
   top: 0px;
   display: flex;
   justify-content: space-between;
-  width: 525px;
+  width: 91vw;
+  max-width: 525px;
   align-items: center;
   img {
     border-radius: 50%;
-    width: 48px;
-    height: 48px;
+    max-width: 48px;
+    max-height: 48px;
   }
 
   span {
