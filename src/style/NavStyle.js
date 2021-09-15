@@ -28,6 +28,7 @@ export const Nav = styled.div`
   }
   a:hover {
     span {
+      display: inline-block;
       z-index: 1;
       font-weight: 600;
       background-color: #9bd2c3;
@@ -35,8 +36,9 @@ export const Nav = styled.div`
       top: 40px;
       border-radius: 5px;
       position: absolute;
-      display: flex;
-      justify-content: center;
+      white-space: nowrap;
+      overflow: hidden;
+      max-width: 100px;
     }
   }
 `;

@@ -24,6 +24,7 @@ import {
   EditButtons,
   ShowButton,
   EditButton,
+  Editing,
 } from "style/NweetStyle";
 
 const Nweet = ({ nweetObj, isOwner, userObj }) => {
@@ -56,7 +57,9 @@ const Nweet = ({ nweetObj, isOwner, userObj }) => {
       });
     }
   };
-  const toggleEditing = () => setEditing((prev) => !prev);
+  const toggleEditing = () => {
+    setEditing((prev) => !prev);
+  };
 
   const onSubmit = async () => {
     updateDoc(doc(dbService, `nweets/${nweetObj.id}`), {
@@ -91,50 +94,54 @@ const Nweet = ({ nweetObj, isOwner, userObj }) => {
     setPhotoURL(userPhotoURL);
   };
   const onShowClick = () => {
-    setShowEdit((prev) => !prev);
+    setShowEdit((prev) => {
+      if (prev) {
+        setEditing(false);
+      }
+      return !prev;
+    });
   };
   return (
     <div>
-      {editing ? (
-        <>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <input
-              {...register("newNweet", { value: nweetObj.text })}
-              type="text"
-              placeholder="Edit your nweet"
-              required
-            />
-            <input type="submit" value="Update Nweet" />
-          </form>
-          <button onClick={toggleEditing}>Cancel</button>
-        </>
-      ) : (
-        <StyledNweet>
-          <Link to={isOwner ? "/profile" : nweetObj.creatorId}>
-            <ProfileImage src={photoURL} />
-          </Link>
-          <div>
-            <TextContainer>
-              <NweetName>{displayName}</NweetName>
+      <StyledNweet>
+        <Link to={isOwner ? "/profile" : nweetObj.creatorId}>
+          <ProfileImage src={photoURL} />
+        </Link>
+        <div>
+          <TextContainer>
+            <NweetName>{displayName}</NweetName>
+            {editing ? (
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <input
+                  id="editNweet"
+                  {...register("newNweet", { value: nweetObj.text })}
+                  type="text"
+                  placeholder="Edit your nweet"
+                />
+              </form>
+            ) : (
               <NweetText>{nweetObj.text}</NweetText>
-              {nweetObj.attachmentUrl && <img src={nweetObj.attachmentUrl} />}
-            </TextContainer>
-            {isOwner && (
-              <EditButtons showEdit={showEdit}>
-                <ShowButton onClick={onShowClick} showEdit={showEdit}>
-                  {showEdit ? "Calcel" : "Edit"}
-                </ShowButton>
-                <EditButton showEdit={showEdit} onClick={onDeleteClick}>
-                  Delete Nweet
-                </EditButton>
-                <EditButton showEdit={showEdit} onClick={toggleEditing}>
-                  Edit Nweet
-                </EditButton>
-              </EditButtons>
             )}
-          </div>
-        </StyledNweet>
-      )}
+            {nweetObj.attachmentUrl && <img src={nweetObj.attachmentUrl} />}
+          </TextContainer>
+          {isOwner && (
+            <EditButtons showEdit={showEdit}>
+              <ShowButton onClick={onShowClick} showEdit={showEdit}>
+                {showEdit ? "Calcel" : "Edit"}
+              </ShowButton>
+              <EditButton showEdit={showEdit} onClick={onDeleteClick}>
+                Delete Nweet
+              </EditButton>
+              <EditButton showEdit={showEdit} onClick={toggleEditing}>
+                Edit Nweet
+              </EditButton>
+              <EditButton showEdit={showEdit} onClick={handleSubmit(onSubmit)}>
+                Update Nweet
+              </EditButton>
+            </EditButtons>
+          )}
+        </div>
+      </StyledNweet>
     </div>
   );
 };

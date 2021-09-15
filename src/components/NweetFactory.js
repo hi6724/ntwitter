@@ -17,14 +17,21 @@ import {
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFile, faImage, faUpload } from "@fortawesome/free-solid-svg-icons";
-import { Form, TextArea } from "style/NweetFactoryStyle";
+import { Attachment, Form, TextArea } from "style/NweetFactoryStyle";
 import { AuthInput, SubmitButton } from "style/AuthStyle";
+import { Button11 } from "style/NweetStyle";
 
 const NweetFacotry = ({ userObj }) => {
   const [attachment, setAttachment] = useState("");
   const { register, handleSubmit, getValues, setValue } = useForm();
   const onSubmit = async () => {
     const { nweet, photo } = getValues();
+    console.log(nweet);
+    console.log(photo);
+    if (photo.length < 1 && !nweet) {
+      alert("Input Nweet or Photo please");
+      return;
+    }
     let attachmentUrl = null;
     if (photo[0]) {
       const attachmentRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
@@ -70,6 +77,14 @@ const NweetFacotry = ({ userObj }) => {
       target: { files },
     } = event;
     const theFile = files[0];
+    //용량 체크
+    const maxSize = 2 * 1024 * 1024;
+    if (theFile.size > maxSize) {
+      alert("첨부파일 사이즈는 3MB 이내로 등록 가능합니다.");
+      onClearAttachment();
+      return;
+    }
+
     const reader = new FileReader();
     reader.onloadend = (finishedEvent) => {
       const {
@@ -79,32 +94,35 @@ const NweetFacotry = ({ userObj }) => {
     };
     reader.readAsDataURL(theFile);
   };
+
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
-      <AuthInput
-        {...register("nweet")}
-        type="text"
-        placeholder="What's on your mind?"
-        maxLength={80}
-      ></AuthInput>
-      <label htmlFor="file-upload" className="custom-file-upload">
-        <FontAwesomeIcon icon={faImage} size="lg" />
-        <input
-          id="file-upload"
-          {...register("photo")}
-          onChange={onFileChange}
-          type="file"
-          accept="image/*"
-        />
-      </label>
-      <SubmitButton type="submit" value="Nweet" />
+    <>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <AuthInput
+          {...register("nweet")}
+          type="text"
+          placeholder="What's on your mind?"
+          maxLength={80}
+        ></AuthInput>
+        <label htmlFor="file-upload" className="custom-file-upload">
+          <FontAwesomeIcon icon={faImage} size="lg" />
+          <input
+            id="file-upload"
+            {...register("photo")}
+            onChange={onFileChange}
+            type="file"
+            accept="image/*"
+          />
+        </label>
+        <SubmitButton type="submit" value="Nweet" />
+      </Form>
       {attachment && (
-        <div>
-          <img src={attachment} width="150px" height="150px" />
-          <button onClick={onClearAttachment}>Clear</button>
-        </div>
+        <Attachment>
+          <Button11 onClick={onClearAttachment}>Clear</Button11>
+          <img src={attachment} width="100%" />
+        </Attachment>
       )}
-    </Form>
+    </>
   );
 };
 

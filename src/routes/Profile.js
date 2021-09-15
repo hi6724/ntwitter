@@ -28,11 +28,13 @@ import {
 
 const Profile = ({ refreshUser, userObj }) => {
   const { register, handleSubmit, setValue, getValues } = useForm();
+  setValue("newDisplayName", userObj.displayName);
   const [page, setPage] = useState(1);
+  console.log(userObj, page);
   const [tempPhoto, setTempPhoto] = useState(userObj.photoUrl);
   const [nweets, setNweets] = useState([]);
   let nweetArray;
-  setValue("newDisplayName", userObj.displayName);
+
   const history = useHistory();
   const onLogOutClick = async () => {
     await signOut(authService);
@@ -40,6 +42,9 @@ const Profile = ({ refreshUser, userObj }) => {
     window.location.reload();
   };
   const getMyNweets = async (page) => {
+    if (page < 1) {
+      return;
+    }
     let q = await query(
       collection(dbService, "nweets"),
       orderBy("createdAt", "desc"),
@@ -147,6 +152,7 @@ const Profile = ({ refreshUser, userObj }) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
             {...register("newDisplayName")}
+            maxLength="6"
             type="text"
             placeholder="Display name"
           />

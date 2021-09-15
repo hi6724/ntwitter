@@ -13,6 +13,7 @@ export const ProfileLayout = styled.div`
     border: none;
     border-radius: 15px;
     margin-right: 15px;
+    padding: 5px 15px;
     height: 50px;
     width: 100%;
     font-size: 17px;

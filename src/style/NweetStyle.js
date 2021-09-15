@@ -18,7 +18,6 @@ export const StyledNweet = styled.div`
   }
 `;
 
-/* CSS */
 export const Button11 = styled.button`
   appearance: button;
   background-color: #1899d6;
@@ -96,11 +95,20 @@ export const TextContainer = styled.div`
     margin-top: 15px;
     width: 100%;
     border-radius: 15px;
+    max-height: 500px;
+  }
+  input[type="text"] {
+    font-size: 16px;
+    margin-left: 12px;
   }
 `;
 export const NweetName = styled.span`
+  display: inline-block;
   font-weight: 600;
   margin-left: 12px;
+  max-width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
 `;
 export const NweetText = styled.span`
   margin-left: 12px;
