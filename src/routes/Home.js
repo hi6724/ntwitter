@@ -59,7 +59,7 @@ const Home = ({ userObj, page, setPage }) => {
     });
   };
   const handleClick = (e) => {
-    console.log(nweets.length);
+    window.scrollTo(0, 0);
     const {
       target: { id },
     } = e;

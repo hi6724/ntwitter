@@ -6,6 +6,9 @@ import AppRouter from "./Router";
 
 const GlobalStyles = createGlobalStyle`
   font-family:"Spoqa Han Sans Neo", "Spoqa Han Sans JP", sans-serif;
+  html{
+    scroll-behavior: smooth;
+  }
   body{
     background-color: #F0F8FF;
   }
