@@ -39,16 +39,3 @@ export const Form = styled.form`
     height: min(10vw, 50px);
   }
 `;
-export const Attachment = styled.div`
-  img {
-    max-height: 500px;
-  }
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  align-items: flex-end;
-  background-color: white;
-  padding: 15px 15px;
-  button {
-  }
-`;

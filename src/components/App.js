@@ -1,5 +1,6 @@
 import { onAuthStateChanged } from "@firebase/auth";
 import { authService } from "fBase";
+import { getUserSnapShot } from "hooks/userQuery";
 import { useEffect, useState } from "react";
 import { createGlobalStyle } from "styled-components";
 import AppRouter from "./Router";
@@ -18,12 +19,17 @@ const GlobalStyles = createGlobalStyle`
     }
 `;
 
-function App() {
+const App = () => {
   const [init, setInit] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userObj, setUserObj] = useState(null);
-  useEffect(() => {
-    onAuthStateChanged(authService, (user) => {
+  const [userSnapShot, setUserSnapShot] = useState();
+  useEffect(async () => {
+    setUserSnapShot(await getUserSnapShot(userObj));
+  }, [userObj]);
+
+  useEffect(async () => {
+    onAuthStateChanged(authService, async (user) => {
       if (user) {
         setUserObj({
           uid: user.uid,
@@ -57,6 +63,7 @@ function App() {
     } else {
       setUserObj(null);
     }
+    setUserSnapShot(await getUserSnapShot(userObj));
   };
   return (
     <>
@@ -66,12 +73,13 @@ function App() {
           refreshUser={refreshUser}
           userObj={userObj}
           isLoggedIn={isLoggedIn}
+          userSnapShot={userSnapShot}
         />
       ) : (
         <span>Loading...</span>
       )}
     </>
   );
-}
+};
 
 export default App;

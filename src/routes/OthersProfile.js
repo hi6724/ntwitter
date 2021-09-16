@@ -9,7 +9,9 @@ import {
   where,
 } from "@firebase/firestore";
 import Nweet from "components/Nweet";
+import { PageBtn } from "components/PageBtn";
 import { dbService } from "fBase";
+import { getNweets } from "hooks/getNweets";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { ButtonContainer, Container, ControlButton } from "style/HomeStyle";
@@ -31,65 +33,11 @@ export const OtherProfile = () => {
     setPhotoURL(userSnapShot.docs[0].data().photoURL);
     setDisplayName(userSnapShot.docs[0].data().displayName);
   };
-
-  const handleClick = (e) => {
-    console.log(page);
-    const {
-      target: { id },
-    } = e;
-    if (id == "prev") {
-      setPage((prev) => {
-        if (prev <= 1) {
-          return 1;
-        } else {
-          return (prev -= 1);
-        }
-      });
-    } else {
-      setPage((prev) => {
-        if (nweets.length < 5) {
-          return prev;
-        } else {
-          return (prev += 1);
-        }
-      });
-    }
-  };
-
-  const getNweets = async (page) => {
-    let q = await query(
-      collection(dbService, "nweets"),
-      orderBy("createdAt", "desc"),
-      where("creatorId", "==", uid),
-      limit(5)
-    );
-    while (page > 1) {
-      const documentSnapshots = await getDocs(q);
-      const lastVisible =
-        documentSnapshots.docs[documentSnapshots.docs.length - 1];
-      q = query(
-        collection(dbService, "nweets"),
-        orderBy("createdAt", "desc"),
-        where("creatorId", "==", uid),
-        startAfter(lastVisible),
-        limit(5)
-      );
-      page -= 1;
-    }
-    await onSnapshot(q, (snapShot) => {
-      nweetArray = snapShot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      if (nweetArray.length < 1) {
-        setPage((prev) => (prev -= 1));
-      }
-      setNweets(nweetArray);
-    });
-  };
   useEffect(() => {
-    getNweets(page);
     getPhoto();
+  });
+  useEffect(() => {
+    getNweets(page, setPage, setNweets, uid);
   }, [page]);
 
   return (
@@ -101,12 +49,7 @@ export const OtherProfile = () => {
       {nweets.map((nweet) => (
         <Nweet key={nweet.id} nweetObj={nweet} isOwner={false} />
       ))}
-      <ControlButton id="prev" onClick={handleClick}>
-        ◀
-      </ControlButton>
-      <ControlButton id="next" onClick={handleClick}>
-        ▶
-      </ControlButton>
+      <PageBtn nweets={nweets} setPage={setPage} />
     </Container>
   );
 };

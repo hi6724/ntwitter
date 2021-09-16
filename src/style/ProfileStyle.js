@@ -39,6 +39,7 @@ export const LogoutButton = styled(Button31)`
 `;
 
 export const Label = styled.label`
+  margin-top: 25px;
   display: block;
   position: relative;
   background-image: ${(props) => {
@@ -49,4 +50,10 @@ export const Label = styled.label`
   height: 100px;
   border-radius: 50%;
   cursor: pointer;
+  button {
+    position: absolute;
+    top: -30px;
+    left: -15px;
+    white-space: nowrap;
+  }
 `;

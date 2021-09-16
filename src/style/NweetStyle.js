@@ -20,7 +20,15 @@ export const StyledNweet = styled.div`
 
 export const Button11 = styled.button`
   appearance: button;
-  background-color: #1899d6;
+
+  background-color: ${(props) => {
+    if (props.children === "Cancel") {
+      return "#D54D52";
+    } else {
+      return "#1899d6";
+    }
+  }};
+
   border: solid transparent;
   border-radius: min(16px, 3vw);
   border-width: 0 0 min(4px, 0.8vw);
@@ -49,7 +57,13 @@ export const Button11 = styled.button`
   /* width: 100%; */
   :after {
     background-clip: padding-box;
-    background-color: #1cb0f6;
+    background-color: ${(props) => {
+      if (props.children === "Cancel") {
+        return "#D54D52";
+      } else {
+        return "#1cb0f6";
+      }
+    }};
     border: solid transparent;
     border-radius: 16px;
     border-width: 0 0 4px;

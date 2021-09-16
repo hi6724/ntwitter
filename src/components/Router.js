@@ -10,6 +10,7 @@ import Profile from "routes/Profile";
 import styled from "styled-components";
 import Auth from "../routes/Auth";
 import Home from "../routes/Home";
+import Demo from "./Demo";
 import Navigation from "./Navigation";
 const Body = styled.div`
   position: relative;
@@ -20,7 +21,7 @@ const Body = styled.div`
   flex-direction: column;
 `;
 
-const AppRouter = ({ refreshUser, isLoggedIn, userObj }) => {
+const AppRouter = ({ refreshUser, isLoggedIn, userObj, userSnapShot }) => {
   const [page, setPage] = useState(1);
   return (
     <Router>
@@ -30,10 +31,19 @@ const AppRouter = ({ refreshUser, isLoggedIn, userObj }) => {
             {isLoggedIn && <Navigation userObj={userObj} setPage={setPage} />}
             <Switch>
               <Route exact path="/">
-                <Home userObj={userObj} page={page} setPage={setPage} />
+                <Home
+                  userObj={userObj}
+                  page={page}
+                  setPage={setPage}
+                  userSnapShot={userSnapShot}
+                />
               </Route>
               <Route exact path="/profile">
-                <Profile userObj={userObj} refreshUser={refreshUser} />
+                <Profile
+                  userObj={userObj}
+                  refreshUser={refreshUser}
+                  userSnapShot={userSnapShot}
+                />
               </Route>
               <Route exact path="/:uid">
                 <OtherProfile />

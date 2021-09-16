@@ -127,7 +127,7 @@ const Nweet = ({ nweetObj, isOwner, userObj }) => {
           {isOwner && (
             <EditButtons showEdit={showEdit}>
               <ShowButton onClick={onShowClick} showEdit={showEdit}>
-                {showEdit ? "Calcel" : "Edit"}
+                {showEdit ? "Cancel" : "Edit"}
               </ShowButton>
               <EditButton showEdit={showEdit} onClick={onDeleteClick}>
                 Delete Nweet
