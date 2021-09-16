@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/components/Demo.css"],"names":[],"mappings":"AAAA,KACE,oBAAqB,CACrB,YAAa,CACb,qBACF,CACA,aACE,eACF","file":"main.811c6086.chunk.css","sourcesContent":[".box {\r\n  display: inline-block;\r\n  padding: 10px;\r\n  box-sizing: border-box;\r\n}\r\n.img-preview {\r\n  overflow: hidden;\r\n}\r\n"]}
