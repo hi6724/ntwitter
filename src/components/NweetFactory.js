@@ -34,7 +34,7 @@ import {
 import Demo from "./Demo";
 import { ImgInput } from "./ImgInput";
 
-const NweetFacotry = ({ userObj, userSnapShot }) => {
+const NweetFacotry = ({ userObj, refreshUser }) => {
   const [attachment, setAttachment] = useState(null);
   const [isCrop, setIsCrop] = useState(false);
   const { register, handleSubmit, getValues, setValue } = useForm();
@@ -52,6 +52,8 @@ const NweetFacotry = ({ userObj, userSnapShot }) => {
     }
     const nweetObj = {
       text: nweet,
+      likes: [],
+      comments: [],
       createdAt: Date.now(),
       attachmentUrl,
       creatorId: userObj.uid,
@@ -60,18 +62,10 @@ const NweetFacotry = ({ userObj, userSnapShot }) => {
         ? userObj.photoURL
         : "https://img1.daumcdn.net/thumb/R1280x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg",
     };
+    const nweetResult = await addDoc(collection(dbService, "nweets"), nweetObj);
 
-    await addDoc(collection(dbService, "nweets"), nweetObj);
-    await updateDoc(doc(dbService, `user/${userSnapShot.docs[0].id}`), {
-      nweets: [
-        {
-          text: nweetObj.text,
-          createdAt: nweetObj.createdAt,
-          attachmentUrl: nweetObj.attachmentUrl,
-        },
-        ...userSnapShot.docs[0].data().nweets,
-      ],
-    });
+    refreshUser();
+
     setAttachment(null);
     setValue("nweet", "");
   };
@@ -105,7 +99,7 @@ const NweetFacotry = ({ userObj, userSnapShot }) => {
               <img src={attachment} />
             </TextContainer>
             <EditButtons>
-              <Button11 onClick={setAttachment(null)}>Cancel</Button11>
+              <Button11 onClick={() => setAttachment(null)}>Cancel</Button11>
               <Button11 onClick={() => setIsCrop(true)}>Crop Size</Button11>
             </EditButtons>
           </div>

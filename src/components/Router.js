@@ -36,6 +36,7 @@ const AppRouter = ({ refreshUser, isLoggedIn, userObj, userSnapShot }) => {
                   page={page}
                   setPage={setPage}
                   userSnapShot={userSnapShot}
+                  refreshUser={refreshUser}
                 />
               </Route>
               <Route exact path="/profile">
@@ -46,7 +47,7 @@ const AppRouter = ({ refreshUser, isLoggedIn, userObj, userSnapShot }) => {
                 />
               </Route>
               <Route exact path="/:uid">
-                <OtherProfile />
+                <OtherProfile userObj={userObj} refreshUser={refreshUser} />
               </Route>
             </Switch>
           </Body>

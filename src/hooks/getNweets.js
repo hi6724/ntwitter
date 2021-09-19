@@ -52,10 +52,12 @@ export const getNweets = async (page, setPage, setNweets, uid) => {
     page -= 1;
   }
   await onSnapshot(q, (snapShot) => {
-    const nweetArray = snapShot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const nweetArray = snapShot.docs.map((doc) => {
+      return {
+        id: doc.id,
+        ...doc.data(),
+      };
+    });
     if (nweetArray.length < 1) {
       setPage((prev) => (prev -= 1));
     }

@@ -7,7 +7,17 @@ export const getUserSnapShot = async (userObj) => {
       collection(dbService, "user"),
       where("uid", "==", userObj.uid)
     );
-    const userSnapShot = await getDocs(userQuery);
+    const userSnapShot = await (await getDocs(userQuery)).docs[0];
     return userSnapShot;
+  }
+};
+export const getUser = async (uid) => {
+  if (uid) {
+    const userQuery = await query(
+      collection(dbService, "user"),
+      where("uid", "==", uid)
+    );
+    const userSnapShot = await (await getDocs(userQuery)).docs[0];
+    return userSnapShot.data();
   }
 };

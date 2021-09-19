@@ -5,7 +5,7 @@ import { getNweets } from "hooks/getNweets";
 import React, { useEffect, useState } from "react";
 import { Container } from "style/HomeStyle";
 
-const Home = ({ userObj, page, setPage, userSnapShot }) => {
+const Home = ({ userObj, page, setPage, userSnapShot, refreshUser }) => {
   const [nweets, setNweets] = useState([]);
 
   useEffect(async () => {
@@ -15,7 +15,11 @@ const Home = ({ userObj, page, setPage, userSnapShot }) => {
   return (
     <>
       <Container>
-        <NweetFacotry userObj={userObj} userSnapShot={userSnapShot} />
+        <NweetFacotry
+          userObj={userObj}
+          userSnapShot={userSnapShot}
+          refreshUser={refreshUser}
+        />
         {nweets.map((nweet) => (
           <Nweet
             key={nweet.id}
@@ -23,6 +27,7 @@ const Home = ({ userObj, page, setPage, userSnapShot }) => {
             isOwner={nweet.creatorId === userObj.uid}
             userObj={userObj}
             userSnapShot={userSnapShot}
+            refreshUser={refreshUser}
           />
         ))}
         <PageBtn nweets={nweets} setPage={setPage} />

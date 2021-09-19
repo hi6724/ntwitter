@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 export const StyledNweet = styled.div`
-  display: flex;
   background-color: white;
   position: relative;
   outline: none;
@@ -11,11 +10,17 @@ export const StyledNweet = styled.div`
   border: 2px solid white;
   box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.33);
   transition: all 0.5s;
+`;
+export const Contents = styled.div`
+  display: flex;
   > div {
     width: 100%;
     display: flex;
     justify-content: space-between;
   }
+`;
+export const Comments = styled.div`
+  border-top: 2px solid black;
 `;
 
 export const Button11 = styled.button`
@@ -123,6 +128,9 @@ export const NweetName = styled.span`
   max-width: 100px;
   white-space: nowrap;
   overflow: hidden;
+  .like {
+    color: tomato;
+  }
 `;
 export const NweetText = styled.span`
   margin-left: 12px;

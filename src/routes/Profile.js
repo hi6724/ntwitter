@@ -70,7 +70,7 @@ const Profile = ({ refreshUser, userObj, userSnapShot }) => {
       });
 
       // const userSnapShot = await getUserSnapShot(userObj);
-      await updateDoc(doc(dbService, `user/${userSnapShot.docs[0].id}`), {
+      await updateDoc(doc(dbService, `user/${userSnapShot.id}`), {
         displayName: newDisplayName,
         photoURL: newProfileUrl,
       });
