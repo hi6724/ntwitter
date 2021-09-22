@@ -20,7 +20,55 @@ export const Contents = styled.div`
   }
 `;
 export const Comments = styled.div`
-  border-top: 2px solid black;
+  margin-top: 15px;
+  border-top: 2px solid rgba(0, 0, 0, 0.8);
+
+  .controller {
+    margin-top: 5px;
+    display: flex;
+    gap: 5px;
+    span {
+      font-size: min(5vw, 25px);
+    }
+  }
+  .commentFactory {
+    input {
+      outline: none;
+      border-radius: 15px;
+      width: min(300px, 50vw);
+      height: 50px;
+      border: none;
+      box-shadow: rgba(99, 99, 99, 0.4) 0px 2px 8px 0px;
+      margin: 15px 0px;
+    }
+    input[type="submit"] {
+      cursor: pointer;
+      color: rgb(4, 170, 255);
+      background: none;
+      box-shadow: none;
+      font-size: 16px;
+      font-weight: 600;
+      margin-left: 6px;
+      height: 50px;
+      width: 50px;
+    }
+  }
+
+  .moreComments {
+    cursor: pointer;
+    border: none;
+    width: min(300px, 50vw);
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+      rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+    background-color: white;
+    border-radius: 8px;
+    transition: all 0.2s;
+    color: #03a9f4;
+    :hover {
+      color: white;
+      background-color: #03a9f4;
+    }
+  }
 `;
 
 export const Button11 = styled.button`
@@ -112,7 +160,7 @@ export const TextContainer = styled.div`
   flex-direction: column;
   img {
     margin-top: 15px;
-    width: 100%;
+    width: min(400px, 58vw);
     border-radius: 15px;
     max-height: 500px;
   }
@@ -128,10 +176,8 @@ export const NweetName = styled.span`
   max-width: 100px;
   white-space: nowrap;
   overflow: hidden;
-  .like {
-    color: tomato;
-  }
 `;
 export const NweetText = styled.span`
   margin-left: 12px;
+  font-size: 22px;
 `;

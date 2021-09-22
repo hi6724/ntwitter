@@ -26,11 +26,13 @@ import { Button11 } from "style/NweetStyle";
 import {
   Label,
   LogoutButton,
+  PLabel,
   ProfileLayout,
   UpdateButton,
 } from "style/ProfileStyle";
 
 const Profile = ({ refreshUser, userObj, userSnapShot }) => {
+  const [likeNum, setLikeNum] = useState(0);
   const { register, handleSubmit, setValue, getValues } = useForm();
   setValue("newDisplayName", userObj.displayName);
   const [page, setPage] = useState(1);
@@ -38,12 +40,17 @@ const Profile = ({ refreshUser, userObj, userSnapShot }) => {
   const [isCrop, setIsCrop] = useState(false);
   const [nweets, setNweets] = useState([]);
   let nweetArray;
-
   useEffect(() => {
     getNweets(page, setPage, setNweets, userObj.uid);
-    // getMyNweets(page);
   }, [page]);
-
+  const countLike = () => {
+    nweets.forEach((nweet) =>
+      setLikeNum((prev) => (prev += nweet.likes.length))
+    );
+  };
+  useEffect(() => {
+    countLike();
+  }, []);
   const history = useHistory();
   const onLogOutClick = async () => {
     await signOut(authService);
@@ -106,12 +113,21 @@ const Profile = ({ refreshUser, userObj, userSnapShot }) => {
     <>
       <Container>
         <ProfileLayout>
-          <Label
-            htmlFor="profilePhoto"
-            img={attachment ? attachment : userObj.photoUrl}
-          >
-            <Button11>Change Photo</Button11>
-          </Label>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <input
+              {...register("newDisplayName")}
+              maxLength="6"
+              type="text"
+              placeholder="Display name"
+            />
+          </form>
+          <div style={{ display: "flex" }}>
+            <Label
+              htmlFor="profilePhoto"
+              img={attachment ? attachment : userObj.photoUrl}
+            ></Label>
+            <div>게시글수 {nweets.length}</div>
+          </div>
           {isCrop && attachment && (
             <Demo
               attachment={attachment}
@@ -121,30 +137,27 @@ const Profile = ({ refreshUser, userObj, userSnapShot }) => {
           )}
           <form onSubmit={handleSubmit(onSubmit)}>
             <input
-              {...register("newDisplayName")}
-              maxLength="6"
-              type="text"
-              placeholder="Display name"
-            />
-            <input
               {...register("profilePhoto")}
               onChange={onFileChange}
               id="profilePhoto"
               type="file"
               accept="image/*"
             />
+            <PLabel htmlFor="profilePhoto">사진 편집</PLabel>
             <UpdateButton onClick={handleSubmit(onSubmit)}>Update</UpdateButton>
           </form>
           <LogoutButton onClick={onLogOutClick}>Log Out</LogoutButton>
         </ProfileLayout>
-        {nweets.map((nweet) => (
-          <Nweet
-            key={nweet.id}
-            nweetObj={nweet}
-            isOwner={nweet.creatorId === userObj.uid}
-            userObj={userObj}
-          />
-        ))}
+        {nweets.map((nweet) => {
+          return (
+            <Nweet
+              key={nweet.id}
+              nweetObj={nweet}
+              isOwner={nweet.creatorId === userObj.uid}
+              userObj={userObj}
+            />
+          );
+        })}
         <PageBtn nweets={nweets} setPage={setPage} />
       </Container>
     </>

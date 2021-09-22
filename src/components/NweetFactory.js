@@ -83,7 +83,7 @@ const NweetFacotry = ({ userObj, refreshUser }) => {
           <FontAwesomeIcon icon={faImage} size="lg" />
           <ImgInput setAttachment={setAttachment} setIsCrop={setIsCrop} />
         </label>
-        <SubmitButton type="submit" value="Nweet" />
+        <SubmitButton type="submit" value="게시" />
       </Form>
       {attachment && isCrop && (
         <Demo

@@ -9,10 +9,15 @@ import {
   where,
 } from "@firebase/firestore";
 import { deleteObject, ref } from "@firebase/storage";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { dbService, storageService } from "fBase";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import {
+  faArrowAltCircleDown,
+  faComments as faComments,
+} from "@fortawesome/free-regular-svg-icons";
 import {
   ProfileDisplayName,
   ProfileImage,
@@ -29,30 +34,35 @@ import {
   Comments,
 } from "style/NweetStyle";
 import { Comment, CommentFactory } from "./Comment";
+import { faWeight } from "@fortawesome/free-solid-svg-icons";
 
 const Nweet = ({ nweetObj, isOwner, userObj, userSnapShot }) => {
   const { register, getValues, handleSubmit } = useForm();
   const [comments, setComments] = useState([]);
+  const [showComment, setShowComment] = useState(true);
+  const [commentPage, setCommentPage] = useState(1);
   const [photoURL, setPhotoURL] = useState("");
   const [showEdit, setShowEdit] = useState(false);
   const [displayName, setDisplayName] = useState("");
   const [editing, setEditing] = useState(false);
   const [isLike, setIsLike] = useState(nweetObj.likes.includes(userObj.uid));
   useEffect(() => {
-    nweetObj.comments.map(async (comment) => {
-      const userQuery = await query(
-        collection(dbService, "user"),
-        where("uid", "==", comment.uid)
-      );
-      const userSnapShot = await getDocs(userQuery);
-      const commentObj = {
-        id: comment.id,
-        uid: comment.uid,
-        data: userSnapShot.docs[0].data(),
-        text: comment.text,
-      };
-      setComments((prev) => [commentObj, ...prev]);
-    });
+    // nweetObj.comments.map(async (comment, index) => {
+    //   if (index < 3 && index >= 0) {
+    //     const userQuery = await query(
+    //       collection(dbService, "user"),
+    //       where("uid", "==", comment.uid)
+    //     );
+    //     const userSnapShot = await getDocs(userQuery);
+    //     const commentObj = {
+    //       id: comment.id,
+    //       uid: comment.uid,
+    //       data: userSnapShot.docs[0].data(),
+    //       text: comment.text,
+    //     };
+    //     setComments((prev) => [commentObj, ...prev]);
+    //   }
+    // });
 
     getPhoto();
   }, []);
@@ -109,6 +119,55 @@ const Nweet = ({ nweetObj, isOwner, userObj, userSnapShot }) => {
     }
     setIsLike((prev) => !prev);
   };
+  const toggleComments = () => {
+    setComments([]);
+    setShowComment((prev) => {
+      if (prev === true) {
+        setCommentPage((prev) => (prev += 1));
+      } else {
+        setCommentPage(1);
+      }
+      return !prev;
+    });
+    if (showComment) {
+      nweetObj.comments.map(async (comment, index) => {
+        if (index < commentPage * 3) {
+          const userQuery = await query(
+            collection(dbService, "user"),
+            where("uid", "==", comment.uid)
+          );
+          const userSnapShot = await getDocs(userQuery);
+          const commentObj = {
+            id: comment.id,
+            uid: comment.uid,
+            data: userSnapShot.docs[0].data(),
+            text: comment.text,
+          };
+          setComments((prev) => [commentObj, ...prev]);
+        }
+      });
+    }
+  };
+  const moreComments = async () => {
+    setCommentPage((prev) => (prev += 1));
+    nweetObj.comments.map(async (comment, index) => {
+      if (index >= (commentPage - 1) * 3 && index < commentPage * 3) {
+        const userQuery = await query(
+          collection(dbService, "user"),
+          where("uid", "==", comment.uid)
+        );
+        const userSnapShot = await getDocs(userQuery);
+        const commentObj = {
+          id: comment.id,
+          uid: comment.uid,
+          data: userSnapShot.docs[0].data(),
+          text: comment.text,
+        };
+        setComments((prev) => [commentObj, ...prev]);
+      }
+    });
+  };
+
   return (
     <div>
       <StyledNweet>
@@ -119,12 +178,7 @@ const Nweet = ({ nweetObj, isOwner, userObj, userSnapShot }) => {
           <div>
             <TextContainer>
               <NweetName>{displayName}</NweetName>
-              <NweetName onClick={clickLike}>
-                <span>
-                  {isLike ? "🧡" : "🤍"}
-                  {nweetObj.likes ? nweetObj.likes.length : 0}
-                </span>
-              </NweetName>
+
               {editing ? (
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <input
@@ -158,24 +212,66 @@ const Nweet = ({ nweetObj, isOwner, userObj, userSnapShot }) => {
                 </EditButton>
               </EditButtons>
             ) : (
-              <EditButtons>
-                <ShowButton>Show</ShowButton>
-              </EditButtons>
+              <EditButtons></EditButtons>
             )}
           </div>
         </Contents>
 
-        {/* <Comments>
-          <CommentFactory userObj={userObj} nweetObj={nweetObj} />
+        <Comments>
+          <div className="controller">
+            <span style={{ cursor: "pointer" }} onClick={clickLike}>
+              {isLike ? "🧡" : "🤍"}
+            </span>
+            <span>
+              <FontAwesomeIcon
+                onClick={toggleComments}
+                style={{ cursor: "pointer" }}
+                icon={faComments}
+                size="lg"
+              />
+            </span>
+          </div>
+          <div style={{ fontWeight: "bold" }}>
+            {" "}
+            좋아요 {nweetObj.likes.length}개
+          </div>
+          <div style={{ opacity: "0.7" }}>
+            댓글 {nweetObj.comments.length}개{" "}
+            <span style={{ cursor: "pointer" }} onClick={toggleComments}>
+              {!showComment ? "닫기" : "모두 보기"}
+            </span>
+          </div>
+          {!showComment && (
+            <div className="commentFactory">
+              <CommentFactory
+                userObj={userObj}
+                nweetObj={nweetObj}
+                setComments={setComments}
+                comments={comments}
+              />
+            </div>
+          )}
           {comments.map((comment) => (
             <Comment
-              key={comment.createdAt}
+              key={comment.id}
               userObj={userObj}
               commentObj={comment}
               nweetObj={nweetObj}
+              setComments={setComments}
+              comments={comments}
+              className="comment"
             />
           ))}
-        </Comments> */}
+
+          {!showComment && (
+            <div className="more">
+              <button onClick={moreComments} className="moreComments">
+                <FontAwesomeIcon icon={faArrowAltCircleDown} size="2x" />
+                <span>더보기</span>
+              </button>
+            </div>
+          )}
+        </Comments>
       </StyledNweet>
     </div>
   );

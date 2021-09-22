@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const Nav = styled.div`
   padding: 0px 20px 10px 20px;
   height: 70px;
-  border-radius: 25px;
+  /* border-radius: 25px; */
   /* background-color: cyan; */
   position: absolute;
   top: 0px;

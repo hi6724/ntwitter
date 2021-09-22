@@ -26,7 +26,9 @@ export const Container = styled.div`
   width: min(90vw, 520px);
   padding: 22px 22px;
   border-radius: 15px;
-  background-color: #a5c3dd;
+  background-color: rgba(238, 238, 238, 0.6);
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
 `;
 
 export const ButtonContainer = styled.div`

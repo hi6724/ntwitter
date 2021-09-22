@@ -13,7 +13,7 @@ const Navigation = ({ userObj, setPage }) => {
     <Nav>
       <Link to="/" onClick={homeClick}>
         <span>home</span>
-        <FontAwesomeIcon icon={faTwitter} color={"#04AAFF"} size="2x" />
+        <FontAwesomeIcon icon={faTwitter} color={"#04AAFF"} size="3x" />
       </Link>
 
       <Link to="/profile">

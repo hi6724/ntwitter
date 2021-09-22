@@ -6,7 +6,11 @@ import { createGlobalStyle } from "styled-components";
 import AppRouter from "./Router";
 
 const GlobalStyles = createGlobalStyle`
-  font-family:"Spoqa Han Sans Neo", "Spoqa Han Sans JP", sans-serif;
+
+  *{
+    /* font-family:"jua" */
+    font-family:"jua","Spoqa Han Sans Neo", "Spoqa Han Sans JP", sans-serif;
+  }
   html{
     scroll-behavior: smooth;
   }
