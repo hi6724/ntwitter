@@ -28,11 +28,11 @@ const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userObj, setUserObj] = useState(null);
   const [userSnapShot, setUserSnapShot] = useState();
-  useEffect(async () => {
-    setUserSnapShot(await getUserSnapShot(userObj));
+  useEffect(() => {
+    setUserSnapShot(getUserSnapShot(userObj));
   }, [userObj]);
 
-  useEffect(async () => {
+  useEffect(() => {
     onAuthStateChanged(authService, async (user) => {
       if (user) {
         setUserObj({

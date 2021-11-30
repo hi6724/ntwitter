@@ -8,7 +8,7 @@ import { Container } from "style/HomeStyle";
 const Home = ({ userObj, page, setPage, userSnapShot, refreshUser }) => {
   const [nweets, setNweets] = useState([]);
 
-  useEffect(async () => {
+  useEffect(() => {
     getNweets(page, setPage, setNweets);
   }, [page]);
 
