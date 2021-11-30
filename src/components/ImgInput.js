@@ -1,6 +1,6 @@
 import React from "react";
 
-export const ImgInput = ({ setIsCrop, setAttachment }) => {
+export const ImgInput = ({ setIsCrop, setAttachment, setImage }) => {
   const onFileChange = (event) => {
     setIsCrop(true);
     setAttachment(null);
@@ -22,6 +22,7 @@ export const ImgInput = ({ setIsCrop, setAttachment }) => {
         currentTarget: { result },
       } = finishedEvent;
       setAttachment(result);
+      setImage(result);
     };
     reader.readAsDataURL(theFile);
     event.target.value = "";

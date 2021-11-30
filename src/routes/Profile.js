@@ -22,7 +22,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useHistory, useParams } from "react-router";
 import { ButtonContainer, Container, ControlButton } from "style/HomeStyle";
-import { Button11 } from "style/NweetStyle";
+import { Button11, Span } from "style/NweetStyle";
 import {
   Label,
   LogoutButton,
@@ -146,7 +146,9 @@ const Profile = ({ refreshUser, userObj, userSnapShot }) => {
             <PLabel htmlFor="profilePhoto">사진 편집</PLabel>
             <UpdateButton onClick={handleSubmit(onSubmit)}>Update</UpdateButton>
           </form>
-          <LogoutButton onClick={onLogOutClick}>Log Out</LogoutButton>
+          <LogoutButton onClick={onLogOutClick}>
+            <Span>Logout</Span>
+          </LogoutButton>
         </ProfileLayout>
         {nweets.map((nweet) => {
           return (

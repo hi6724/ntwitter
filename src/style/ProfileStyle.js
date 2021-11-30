@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Button31 } from "./AuthStyle";
-import { Button11 } from "./NweetStyle";
+import { Button11, Button48 } from "./NweetStyle";
 
 export const ProfileLayout = styled.div`
   input[type="file"] {
@@ -62,7 +62,7 @@ export const PLabel = styled.label`
   }
 `;
 
-export const LogoutButton = styled(Button31)`
+export const LogoutButton = styled(Button48)`
   cursor: pointer;
   position: absolute;
   right: 15px;

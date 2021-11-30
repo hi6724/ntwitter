@@ -32,6 +32,7 @@ import {
   Editing,
   Contents,
   Comments,
+  Span,
 } from "style/NweetStyle";
 import { Comment, CommentFactory } from "./Comment";
 import { faWeight } from "@fortawesome/free-solid-svg-icons";
@@ -196,19 +197,19 @@ const Nweet = ({ nweetObj, isOwner, userObj, userSnapShot }) => {
             {isOwner ? (
               <EditButtons showEdit={showEdit}>
                 <ShowButton onClick={onShowClick} showEdit={showEdit}>
-                  {showEdit ? "Cancel" : "Edit"}
+                  {showEdit ? <Span>Cancel</Span> : <Span>Edit</Span>}
                 </ShowButton>
                 <EditButton showEdit={showEdit} onClick={onDeleteClick}>
-                  Delete Nweet
+                  <Span>Delete Nweet</Span>
                 </EditButton>
                 <EditButton showEdit={showEdit} onClick={toggleEditing}>
-                  Edit Nweet
+                  <Span>Edit Nweet</Span>
                 </EditButton>
                 <EditButton
                   showEdit={showEdit}
                   onClick={handleSubmit(onSubmit)}
                 >
-                  Update Nweet
+                  <Span>Update Nweet</Span>
                 </EditButton>
               </EditButtons>
             ) : (
